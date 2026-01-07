@@ -992,4 +992,214 @@
         async function processCheckout(code) {
             if (!currentUser) {
                 showAlert('Please login to checkout items');
+                navigateTo('login');
+                return;
+            }
+
+            const item = items.find(i => i.code === code);
+            
+            if (!item) {
+                showAlert('Item not found. Please check the code.');
+                return;
+            }
+
+            // Check if already checked out
+            const existingCheckout = checkouts.find(c => c.itemId === item.id && c.status === 'checked-out');
+            
+            if (existingCheckout) {
+                showAlert(`⚠️ Already checked out by ${existingCheckout.username} on ${new Date(existingCheckout.checkedOutAt).toLocaleDateString()}`);
+                return;
+            }
+
+            // Create checkout
+            const checkout = {
+                id: Date.now().toString(),
+                itemId: item.id,
+                itemName: item.name,
+                userId: currentUser.id,
+                username: currentUser.username,
+                checkedOutAt: new Date().toISOString(),
+                status: 'checked-out'
+            };
+
+            checkouts.push(checkout);
+            await saveData();
+
+            showAlert(`✅ Successfully checked out: ${item.name}`);
+            
+            // Show confirmation
+            setTimeout(() => {
+                if (confirm(`${item.name}\nChecked out to: ${currentUser.username}\nDate: ${new Date().toLocaleString()}\n\nView in Item Case?`)) {
+                    navigateTo('account');
+                }
+            }, 500);
+        }
+
+        // Admin Functions
+        async function handleAddItem(event) {
+            event.preventDefault();
+            const name = document.getElementById('itemName').value;
+            const photo = document.getElementById('itemPhoto').value || '📦';
+            const quantity = parseInt(document.getElementById('itemQuantity').value);
+
+            for (let i = 0; i < quantity; i++) {
+                const item = {
+                    id: Date.now().toString() + '-' + i,
+                    code: generateCode(),
+                    name: quantity > 1 ? `${name} #${i + 1}` : name,
+                    photo: photo,
+                    status: 'available',
+                    createdAt: new Date().toISOString(),
+                    createdBy: currentUser.username
+                };
+                items.push(item);
+            }
+
+            await saveData();
+            showAlert(`Added ${quantity} item(s) successfully!`);
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemPhoto').value = '';
+            document.getElementById('itemQuantity').value = '1';
+            updateAdminPage();
+        }
+
+        function generateCode() {
+            return 'TECH-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
+
+        async function deleteItem(itemId) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                items = items.filter(i => i.id !== itemId);
+                checkouts = checkouts.filter(c => c.itemId !== itemId);
+                await saveData();
+                showAlert('Item deleted successfully');
+                updateAdminPage();
+            }
+        }
+
+        function showQRCode(item) {
+            document.getElementById('qrItemName').textContent = item.name;
+            document.getElementById('qrCodeDisplay').innerHTML = `
+                <div style="font-size:14px; color:#1e3a8a; word-break:break-all;">
+                    <strong>CODE:</strong><br>${item.code}
+                </div>
+            `;
+            document.getElementById('qrModal').style.display = 'flex';
+        }
+
+        function closeQRModal() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+
+        async function returnItem(itemId) {
+            const checkout = checkouts.find(c => c.itemId === itemId && c.status === 'checked-out');
+            if (checkout) {
+                checkout.status = 'returned';
+                checkout.returnedAt = new Date().toISOString();
+                await saveData();
+                showAlert('Item returned successfully!');
+                updateAdminPage();
+                updateAccountPage();
+            }
+        }
+
+        // Page Updates
+        function updateAccountPage() {
+            if (!currentUser) return;
+
+            document.getElementById('profileUsername').textContent = currentUser.username;
+            document.getElementById('profileEmail').textContent = currentUser.email;
+            document.getElementById('profileType').textContent = currentUser.type;
+
+            const userCheckouts = checkouts.filter(c => c.userId === currentUser.id && c.status === 'checked-out');
+            const userItemsDiv = document.getElementById('userItems');
+
+            if (userCheckouts.length === 0) {
+                userItemsDiv.innerHTML = '<p>No items currently checked out</p>';
+            } else {
+                userItemsDiv.innerHTML = userCheckouts.map(checkout => {
+                    const item = items.find(i => i.id === checkout.itemId);
+                    return `
+                        <div class="item-card">
+                            <div class="item-photo">${item ? item.photo : '📦'}</div>
+                            <div class="item-name">${checkout.itemName}</div>
+                            <p style="font-size:14px; margin:10px 0;">Checked out: ${new Date(checkout.checkedOutAt).toLocaleDateString()}</p>
+                            <button class="btn-small" onclick="returnItemUser('${checkout.itemId}')">Return</button>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        async function returnItemUser(itemId) {
+            if (confirm('Return this item?')) {
+                await returnItem(itemId);
+            }
+        }
+
+        function updateAdminPage() {
+            if (!currentUser || currentUser.type !== 'admin') return;
+
+            // Update item list
+            const adminItemList = document.getElementById('adminItemList');
+            adminItemList.innerHTML = items.map(item => {
+                const checkout = checkouts.find(c => c.itemId === item.id && c.status === 'checked-out');
+                const isCheckedOut = !!checkout;
+
+                return `
+                    <div class="item-card">
+                        <div class="item-photo">${item.photo}</div>
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-status ${isCheckedOut ? 'status-checked-out' : 'status-available'}">
+                            ${isCheckedOut ? 'Checked Out' : 'Available'}
+                        </div>
+                        ${isCheckedOut ? `<p style="font-size:12px;">By: ${checkout.username}</p>` : ''}
+                        <div class="item-actions">
+                            <button class="btn-small" onclick='showQRCode(${JSON.stringify(item)})'>QR Code</button>
+                            ${isCheckedOut ? 
+                                `<button class="btn-small" onclick="returnItem('${item.id}')">Return</button>` :
+                                `<button class="btn-small" onclick="deleteItem('${item.id}')">Delete</button>`
+                            }
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Update people list
+            const peopleList = document.getElementById('peopleList').getElementsByTagName('tbody')[0];
+            const userCheckoutMap = {};
+
+            checkouts.filter(c => c.status === 'checked-out').forEach(checkout => {
+                if (!userCheckoutMap[checkout.username]) {
+                    userCheckoutMap[checkout.username] = [];
+                }
+                userCheckoutMap[checkout.username].push(checkout);
+            });
+
+            peopleList.innerHTML = Object.keys(userCheckoutMap).map(username => {
+                const userCheckouts = userCheckoutMap[username];
+                return `
+                    <tr>
+                        <td><strong>${username}</strong></td>
+                        <td>${userCheckouts.map(c => c.itemName).join(', ')}</td>
+                        <td>${userCheckouts.map(c => new Date(c.checkedOutAt).toLocaleDateString()).join(', ')}</td>
+                    </tr>
+                `;
+            }).join('') || '<tr><td colspan="3" style="text-align:center;">No active checkouts</td></tr>';
+        }
+
+        // Alert System
+        function showAlert(message) {
+            const alert = document.createElement('div');
+            alert.className = 'alert';
+            alert.textContent = message;
+            document.body.appendChild(alert);
+
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+
+        // Initialize app on load
+        initializeApp();
                 
