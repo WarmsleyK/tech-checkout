@@ -496,7 +496,7 @@
         <div class="login-container">
             <div class="form-container">
                 <h2>LOG IN</h2>
-                <form id="loginForm">
+                <form id="loginForm" onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label>Username</label>
                         <input type="text" id="loginUsername" required placeholder="Enter your username">
@@ -518,7 +518,7 @@
         <div class="login-container">
             <div class="form-container">
                 <h2>SIGN UP</h2>
-                <form id="signupForm">
+                <form id="signupForm" onsubmit="handleSignup(event)">
                     <div class="form-group">
                         <label>Create Username</label>
                         <input type="text" id="signupUsername" required placeholder="Choose a username">
@@ -675,60 +675,72 @@
             }
         }
 
-        // Login
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('loginForm').addEventListener('submit', async function(event) {
-                event.preventDefault();
-                
-                const username = document.getElementById('loginUsername').value.trim();
-                const password = document.getElementById('loginPassword').value;
+        // Login Handler
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
 
-                const user = users.find(u => u.username === username && u.password === password);
+            console.log('Attempting login for:', username);
+            console.log('Available users:', users.map(u => u.username));
 
-                if (user) {
-                    currentUser = user;
-                    await window.storage.set('currentUser', JSON.stringify(user));
-                    updateUIForLoggedInUser();
-                    showAlert('Welcome back, ' + username + '!');
-                    navigateTo('home');
-                } else {
-                    showAlert('❌ Invalid username or password');
-                }
-            });
+            const user = users.find(u => u.username === username && u.password === password);
 
-            // Signup
-            document.getElementById('signupForm').addEventListener('submit', async function(event) {
-                event.preventDefault();
-                
-                const username = document.getElementById('signupUsername').value.trim();
-                const password = document.getElementById('signupPassword').value;
-                const email = document.getElementById('signupEmail').value.trim();
-                const type = document.getElementById('accountType').value;
-
-                if (users.find(u => u.username === username)) {
-                    showAlert('Username already exists');
-                    return;
-                }
-
-                const newUser = {
-                    id: Date.now().toString(),
-                    username,
-                    password,
-                    email,
-                    type,
-                    createdAt: new Date().toISOString()
-                };
-
-                users.push(newUser);
-                currentUser = newUser;
-                await saveUsers();
-                await window.storage.set('currentUser', JSON.stringify(newUser));
-                
+            if (user) {
+                currentUser = user;
+                await window.storage.set('currentUser', JSON.stringify(user));
                 updateUIForLoggedInUser();
-                showAlert('Account created successfully!');
+                showAlert('✅ Welcome back, ' + username + '!');
+                
+                // Clear form
+                document.getElementById('loginUsername').value = '';
+                document.getElementById('loginPassword').value = '';
+                
                 navigateTo('home');
-            });
-        });
+            } else {
+                showAlert('❌ Invalid username or password');
+            }
+        }
+
+        // Signup Handler
+        async function handleSignup(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('signupUsername').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const email = document.getElementById('signupEmail').value.trim();
+            const type = document.getElementById('accountType').value;
+
+            if (users.find(u => u.username === username)) {
+                showAlert('❌ Username already exists');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now().toString(),
+                username,
+                password,
+                email,
+                type,
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            currentUser = newUser;
+            await saveUsers();
+            await window.storage.set('currentUser', JSON.stringify(newUser));
+            
+            updateUIForLoggedInUser();
+            showAlert('✅ Account created successfully!');
+            
+            // Clear form
+            document.getElementById('signupUsername').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('signupEmail').value = '';
+            
+            navigateTo('home');
+        }
 
         async function logout() {
             currentUser = null;
