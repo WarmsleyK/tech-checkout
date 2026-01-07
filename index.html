@@ -31,6 +31,7 @@
             font-size: 24px;
             font-weight: bold;
             letter-spacing: 2px;
+            cursor: pointer;
         }
 
         .nav-links {
@@ -45,6 +46,7 @@
             font-size: 18px;
             transition: opacity 0.3s;
             padding-bottom: 5px;
+            cursor: pointer;
         }
 
         .nav-links a:hover {
@@ -55,7 +57,7 @@
             border-bottom: 3px solid white;
         }
 
-        .login-btn {
+        .auth-btn {
             background: transparent;
             border: 2px solid white;
             color: white;
@@ -66,7 +68,7 @@
             transition: all 0.3s;
         }
 
-        .login-btn:hover {
+        .auth-btn:hover {
             background: white;
             color: #1e3a8a;
         }
@@ -87,14 +89,53 @@
             border-radius: 2px;
         }
 
-        /* Main Content */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: rgba(30, 58, 138, 0.98);
+            border: 2px solid white;
+            border-radius: 10px;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            margin: 5px 0;
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            padding: 40px 20px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .page.active {
+            display: block;
+        }
+
         .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Home Page */
+        .home-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 60px 20px;
-            min-height: calc(100vh - 80px);
+            min-height: calc(100vh - 160px);
         }
 
         h1 {
@@ -105,7 +146,6 @@
             letter-spacing: 1px;
         }
 
-        /* Checkout Container */
         .checkout-container {
             display: flex;
             border: 4px solid white;
@@ -229,9 +269,223 @@
             text-align: center;
         }
 
+        /* Forms */
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid white;
+        }
+
+        h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid white;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            background: white;
+            color: #1e3a8a;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .link-text {
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Admin & Account Pages */
+        .content-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .item-card {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .item-photo {
+            width: 100%;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 48px;
+        }
+
+        .item-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .item-status {
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .status-available {
+            background: #10b981;
+        }
+
+        .status-checked-out {
+            background: #ef4444;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-small {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid white;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-small:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            background: white;
+            margin: 20px auto;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e3a8a;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .alert {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            color: #1e3a8a;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .list-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .list-table th,
+        .list-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .list-table th {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            .nav-links, .login-btn {
+            .nav-links, .auth-btn {
                 display: none;
             }
 
@@ -252,6 +506,10 @@
                 margin-bottom: 40px;
             }
 
+            h2 {
+                font-size: 28px;
+            }
+
             .checkout-container {
                 flex-direction: column;
                 max-width: 400px;
@@ -270,6 +528,14 @@
                 width: 100px;
                 height: 70px;
             }
+
+            .item-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-container {
+                padding: 30px 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -286,36 +552,168 @@
 <body>
     <!-- Navigation -->
     <nav>
-        <div class="logo">TECH CHECKOUT</div>
+        <div class="logo" onclick="navigateTo('home')">TECH CHECKOUT</div>
         
-        <div class="hamburger" onclick="toggleMenu()">
+        <div class="hamburger" onclick="toggleMobileMenu()">
             <span></span>
             <span></span>
             <span></span>
         </div>
         
         <ul class="nav-links">
-            <li><a href="#" class="active">Home</a></li>
-            <li><a href="#admin">Admin</a></li>
-            <li><a href="#account">Account</a></li>
+            <li><a onclick="navigateTo('home')" class="nav-link">Home</a></li>
+            <li><a onclick="navigateTo('admin')" class="nav-link" id="adminNav" style="display:none;">Admin</a></li>
+            <li><a onclick="navigateTo('account')" class="nav-link" id="accountNav" style="display:none;">Account</a></li>
         </ul>
         
-        <button class="login-btn" onclick="alert('Login functionality coming soon!')">Login</button>
+        <button class="auth-btn" id="authBtn" onclick="navigateTo('login')">Login</button>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container">
-        <h1>CHECKOUT YOUR TECH:</h1>
-        
-        <div class="checkout-container">
-            <div class="scanner-section" onclick="startScanner()">
-                <div class="camera-icon">📷</div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a onclick="navigateTo('home'); toggleMobileMenu()">Home</a>
+        <a onclick="navigateTo('admin'); toggleMobileMenu()" id="adminNavMobile" style="display:none;">Admin</a>
+        <a onclick="navigateTo('account'); toggleMobileMenu()" id="accountNavMobile" style="display:none;">Account</a>
+        <a onclick="handleAuth(); toggleMobileMenu()" id="authBtnMobile">Login</a>
+    </div>
+
+    <!-- HOME PAGE -->
+    <div id="homePage" class="page active">
+        <div class="home-container">
+            <h1>CHECKOUT YOUR TECH:</h1>
+            
+            <div class="checkout-container">
+                <div class="scanner-section" onclick="startScanner()">
+                    <div class="camera-icon">📷</div>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="code-section">
+                    <input type="text" class="code-input" placeholder="Input Code" id="manualCode" onkeypress="handleManualCode(event)">
+                </div>
             </div>
+        </div>
+    </div>
+
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="page">
+        <div class="container">
+            <div class="form-container">
+                <h2>LOG IN</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="loginUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <div class="link-text" onclick="navigateTo('signup')">Don't have an account? Sign Up</div>
+                    <div class="link-text" onclick="handleForgotPassword()">Forgot Password?</div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIGNUP PAGE -->
+    <div id="signupPage" class="page">
+        <div class="container">
+            <div class="form-container">
+                <h2>SIGN UP</h2>
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label>Create Username</label>
+                        <input type="text" id="signupUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Create Password</label>
+                        <input type="password" id="signupPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Attach Email</label>
+                        <input type="email" id="signupEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Account Type</label>
+                        <select id="accountType">
+                            <option value="user">Regular User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Sign Up</button>
+                    <div class="link-text" onclick="navigateTo('login')">Already have an account? Log In</div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCOUNT PAGE -->
+    <div id="accountPage" class="page">
+        <div class="container">
+            <h2>MY ACCOUNT</h2>
+            <div class="content-box">
+                <h3>Profile Information</h3>
+                <p><strong>Username:</strong> <span id="profileUsername"></span></p>
+                <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+                <p><strong>Account Type:</strong> <span id="profileType"></span></p>
+            </div>
+
+            <div class="content-box">
+                <h3>MY ITEM CASE</h3>
+                <div id="userItems" class="item-grid">
+                    <p>No items currently checked out</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN PAGE -->
+    <div id="adminPage" class="page">
+        <div class="container">
+            <h2>ADMIN PANEL</h2>
             
-            <div class="divider"></div>
-            
-            <div class="code-section">
-                <input type="text" class="code-input" placeholder="Input Code" id="manualCode" onkeypress="handleManualCode(event)">
+            <!-- Add Item Section -->
+            <div class="content-box">
+                <h3>Add/Remove Items</h3>
+                <form onsubmit="handleAddItem(event)">
+                    <div class="form-group">
+                        <label>Item Name</label>
+                        <input type="text" id="itemName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Item Photo (emoji or text)</label>
+                        <input type="text" id="itemPhoto" placeholder="e.g., 💻 or iPad">
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity (for duplicates)</label>
+                        <input type="number" id="itemQuantity" value="1" min="1">
+                    </div>
+                    <button type="submit" class="btn">Add Item(s)</button>
+                </form>
+            </div>
+
+            <!-- Item List -->
+            <div class="content-box">
+                <h3>Item List</h3>
+                <div id="adminItemList" class="item-grid"></div>
+            </div>
+
+            <!-- People List -->
+            <div class="content-box">
+                <h3>People & Checkouts</h3>
+                <table class="list-table" id="peopleList">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Items Checked Out</th>
+                            <th>When</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -324,25 +722,206 @@
     <div id="videoContainer">
         <video id="video" autoplay playsinline></video>
         <div class="scanner-controls">
-            <button class="scanner-btn" onclick="captureCode()">Capture</button>
             <button class="scanner-btn cancel" onclick="stopScanner()">Cancel</button>
         </div>
         <div id="scanResult"></div>
     </div>
 
+    <!-- QR Code Display Modal -->
+    <div id="qrModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:white; padding:40px; border-radius:20px; text-align:center;">
+            <h3 style="color:#1e3a8a; margin-bottom:20px;">QR Code for <span id="qrItemName"></span></h3>
+            <div id="qrCodeDisplay" class="qr-code"></div>
+            <button class="btn" onclick="closeQRModal()" style="margin-top:20px;">Close</button>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
     <script>
+        // State Management
+        let currentUser = null;
+        let items = [];
+        let users = [];
+        let checkouts = [];
         let stream = null;
         let scanning = false;
+
+        // Initialize from storage
+        async function initializeApp() {
+            try {
+                const itemsData = await window.storage.get('items');
+                if (itemsData) items = JSON.parse(itemsData.value);
+                
+                const usersData = await window.storage.get('users');
+                if (usersData) users = JSON.parse(usersData.value);
+                
+                const checkoutsData = await window.storage.get('checkouts');
+                if (checkoutsData) checkouts = JSON.parse(checkoutsData.value);
+
+                const sessionData = await window.storage.get('currentUser');
+                if (sessionData) {
+                    currentUser = JSON.parse(sessionData.value);
+                    updateUIForLoggedInUser();
+                }
+            } catch (error) {
+                console.log('Initializing fresh storage');
+                items = [];
+                users = [];
+                checkouts = [];
+            }
+        }
+
+        // Save to storage
+        async function saveData() {
+            try {
+                await window.storage.set('items', JSON.stringify(items));
+                await window.storage.set('users', JSON.stringify(users));
+                await window.storage.set('checkouts', JSON.stringify(checkouts));
+            } catch (error) {
+                console.error('Error saving data:', error);
+            }
+        }
+
+        // Navigation
+        function navigateTo(page) {
+            // Check if admin page requires admin access
+            if (page === 'admin' && (!currentUser || currentUser.type !== 'admin')) {
+                showAlert('Admin access required');
+                return;
+            }
+
+            // Check if account page requires login
+            if (page === 'account' && !currentUser) {
+                showAlert('Please login first');
+                navigateTo('login');
+                return;
+            }
+
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page + 'Page').classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
+            // Update page content
+            if (page === 'account') updateAccountPage();
+            if (page === 'admin') updateAdminPage();
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        }
+
+        // Authentication
+        function handleAuth() {
+            if (currentUser) {
+                logout();
+            } else {
+                navigateTo('login');
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                await window.storage.set('currentUser', JSON.stringify(currentUser));
+                updateUIForLoggedInUser();
+                showAlert('Welcome back, ' + username + '!');
+                navigateTo('home');
+            } else {
+                showAlert('Invalid username or password');
+            }
+        }
+
+        async function handleSignup(event) {
+            event.preventDefault();
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+            const email = document.getElementById('signupEmail').value;
+            const type = document.getElementById('accountType').value;
+
+            if (users.find(u => u.username === username)) {
+                showAlert('Username already exists');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now().toString(),
+                username,
+                password,
+                email,
+                type,
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            currentUser = newUser;
+            await saveData();
+            await window.storage.set('currentUser', JSON.stringify(currentUser));
+            
+            updateUIForLoggedInUser();
+            showAlert('Account created successfully!');
+            navigateTo('home');
+        }
+
+        async function logout() {
+            currentUser = null;
+            try {
+                await window.storage.delete('currentUser');
+            } catch (error) {
+                console.log('Session cleared');
+            }
+            
+            document.getElementById('authBtn').textContent = 'Login';
+            document.getElementById('authBtnMobile').textContent = 'Login';
+            document.getElementById('adminNav').style.display = 'none';
+            document.getElementById('adminNavMobile').style.display = 'none';
+            document.getElementById('accountNav').style.display = 'none';
+            document.getElementById('accountNavMobile').style.display = 'none';
+            
+            showAlert('Logged out successfully');
+            navigateTo('home');
+        }
+
+        function updateUIForLoggedInUser() {
+            document.getElementById('authBtn').textContent = 'Logout';
+            document.getElementById('authBtn').onclick = logout;
+            document.getElementById('authBtnMobile').textContent = 'Logout';
+            document.getElementById('authBtnMobile').onclick = logout;
+            
+            document.getElementById('accountNav').style.display = 'block';
+            document.getElementById('accountNavMobile').style.display = 'block';
+            
+            if (currentUser.type === 'admin') {
+                document.getElementById('adminNav').style.display = 'block';
+                document.getElementById('adminNavMobile').style.display = 'block';
+            }
+        }
+
+        function handleForgotPassword() {
+            const email = prompt('Enter your email address:');
+            if (email) {
+                showAlert('Password reset link sent to ' + email);
+            }
+        }
+
+        // QR Scanner
         const video = document.getElementById('video');
         const videoContainer = document.getElementById('videoContainer');
         const scanResult = document.getElementById('scanResult');
 
-        function toggleMenu() {
-            alert('Mobile menu functionality coming soon!');
-        }
-
         async function startScanner() {
+            if (!currentUser) {
+                showAlert('Please login to checkout items');
+                navigateTo('login');
+                return;
+            }
+
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ 
                     video: { facingMode: 'environment' } 
@@ -352,7 +931,7 @@
                 scanning = true;
                 scanQRCode();
             } catch (err) {
-                alert('Camera access denied or not available. Please use manual code entry.');
+                showAlert('Camera access denied. Please use manual code entry.');
                 console.error('Camera error:', err);
             }
         }
@@ -390,18 +969,13 @@
             requestAnimationFrame(scanQRCode);
         }
 
-        function captureCode() {
-            // Manual capture attempt
-            scanResult.textContent = 'Scanning...';
-        }
-
         function handleScannedCode(code) {
             scanning = false;
             scanResult.textContent = `Code detected: ${code}`;
             setTimeout(() => {
                 processCheckout(code);
                 stopScanner();
-            }, 1500);
+            }, 1000);
         }
 
         function handleManualCode(event) {
@@ -414,10 +988,8 @@
             }
         }
 
-        function processCheckout(code) {
-            // This will connect to the database and checkout logic
-            alert(`Processing checkout for code: ${code}\n\n(Database integration coming in next phase)`);
-        }
-    </script>
-</body>
-</html>
+        // Checkout Process
+        async function processCheckout(code) {
+            if (!currentUser) {
+                showAlert('Please login to checkout items');
+                
