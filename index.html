@@ -31,6 +31,7 @@
             font-size: 24px;
             font-weight: bold;
             letter-spacing: 2px;
+            cursor: pointer;
         }
 
         .nav-links {
@@ -45,6 +46,7 @@
             font-size: 18px;
             transition: opacity 0.3s;
             padding-bottom: 5px;
+            cursor: pointer;
         }
 
         .nav-links a:hover {
@@ -55,7 +57,7 @@
             border-bottom: 3px solid white;
         }
 
-        .login-btn {
+        .auth-btn {
             background: transparent;
             border: 2px solid white;
             color: white;
@@ -66,7 +68,7 @@
             transition: all 0.3s;
         }
 
-        .login-btn:hover {
+        .auth-btn:hover {
             background: white;
             color: #1e3a8a;
         }
@@ -87,8 +89,42 @@
             border-radius: 2px;
         }
 
-        /* Main Content */
-        .container {
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: rgba(30, 58, 138, 0.98);
+            border: 2px solid white;
+            border-radius: 10px;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        /* Page System */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Home Page */
+        .home-container {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -105,7 +141,6 @@
             letter-spacing: 1px;
         }
 
-        /* Checkout Container */
         .checkout-container {
             display: flex;
             border: 4px solid white;
@@ -229,9 +264,124 @@
             text-align: center;
         }
 
+        /* Login Page */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .form-container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid white;
+        }
+
+        h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid white;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        select option {
+            background: #1e3a8a;
+            color: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            background: white;
+            color: #1e3a8a;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .link-text {
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 16px;
+        }
+
+        .link-text:hover {
+            opacity: 0.8;
+        }
+
+        .alert {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            color: #1e3a8a;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+            max-width: 300px;
+            font-weight: bold;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            .nav-links, .login-btn {
+            .nav-links, .auth-btn {
                 display: none;
             }
 
@@ -252,6 +402,10 @@
                 margin-bottom: 40px;
             }
 
+            h2 {
+                font-size: 28px;
+            }
+
             .checkout-container {
                 flex-direction: column;
                 max-width: 400px;
@@ -270,6 +424,16 @@
                 width: 100px;
                 height: 70px;
             }
+
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            .alert {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -286,37 +450,114 @@
 <body>
     <!-- Navigation -->
     <nav>
-        <div class="logo">TECH CHECKOUT</div>
+        <div class="logo" onclick="navigateTo('home')">TECH CHECKOUT</div>
         
-        <div class="hamburger" onclick="toggleMenu()">
+        <div class="hamburger" onclick="toggleMobileMenu()">
             <span></span>
             <span></span>
             <span></span>
         </div>
         
         <ul class="nav-links">
-            <li><a href="#" class="active">Home</a></li>
-            <li><a href="#admin">Admin</a></li>
-            <li><a href="#account">Account</a></li>
+            <li><a onclick="navigateTo('home')" class="nav-link" id="homeNav">Home</a></li>
+            <li><a onclick="navigateTo('admin')" class="nav-link" id="adminNav" style="display:none;">Admin</a></li>
+            <li><a onclick="navigateTo('account')" class="nav-link" id="accountNav" style="display:none;">Account</a></li>
         </ul>
         
-        <button class="login-btn" onclick="alert('Login functionality coming soon!')">Login</button>
+        <button class="auth-btn" id="authBtn" onclick="handleAuth()">Login</button>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container">
-        <h1>CHECKOUT YOUR TECH:</h1>
-        
-        <div class="checkout-container">
-            <div class="scanner-section" onclick="startScanner()">
-                <div class="camera-icon">📷</div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a onclick="navigateTo('home'); toggleMobileMenu()">Home</a>
+        <a onclick="navigateTo('admin'); toggleMobileMenu()" id="adminNavMobile" style="display:none;">Admin</a>
+        <a onclick="navigateTo('account'); toggleMobileMenu()" id="accountNavMobile" style="display:none;">Account</a>
+        <a onclick="handleAuth(); toggleMobileMenu()" id="authBtnMobile">Login</a>
+    </div>
+
+    <!-- HOME PAGE -->
+    <div id="homePage" class="page active">
+        <div class="home-container">
+            <h1>CHECKOUT YOUR TECH:</h1>
+            <div class="checkout-container">
+                <div class="scanner-section" onclick="startScanner()">
+                    <div class="camera-icon">📷</div>
+                </div>
+                <div class="divider"></div>
+                <div class="code-section">
+                    <input type="text" class="code-input" placeholder="Input Code" id="manualCode" onkeypress="handleManualCode(event)">
+                </div>
             </div>
-            
-            <div class="divider"></div>
-            
-            <div class="code-section">
-                <input type="text" class="code-input" placeholder="Input Code" id="manualCode" onkeypress="handleManualCode(event)">
+        </div>
+    </div>
+
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="page">
+        <div class="login-container">
+            <div class="form-container">
+                <h2>LOG IN</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="loginUsername" required placeholder="Enter your username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <div class="link-text" onclick="navigateTo('signup')">Don't have an account? Sign Up</div>
+                    <div class="link-text" onclick="forgotPassword()">Forgot Password?</div>
+                </form>
             </div>
+        </div>
+    </div>
+
+    <!-- SIGNUP PAGE -->
+    <div id="signupPage" class="page">
+        <div class="login-container">
+            <div class="form-container">
+                <h2>SIGN UP</h2>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label>Create Username</label>
+                        <input type="text" id="signupUsername" required placeholder="Choose a username">
+                    </div>
+                    <div class="form-group">
+                        <label>Create Password</label>
+                        <input type="password" id="signupPassword" required placeholder="Choose a password">
+                    </div>
+                    <div class="form-group">
+                        <label>Attach Email</label>
+                        <input type="email" id="signupEmail" required placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label>Account Type</label>
+                        <select id="accountType">
+                            <option value="user">Regular User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Sign Up</button>
+                    <div class="link-text" onclick="navigateTo('login')">Already have an account? Log In</div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCOUNT PAGE (Placeholder) -->
+    <div id="accountPage" class="page">
+        <div class="home-container">
+            <h1>MY ACCOUNT</h1>
+            <p>Account page coming soon...</p>
+        </div>
+    </div>
+
+    <!-- ADMIN PAGE (Placeholder) -->
+    <div id="adminPage" class="page">
+        <div class="home-container">
+            <h1>ADMIN PANEL</h1>
+            <p>Admin page coming soon...</p>
         </div>
     </div>
 
@@ -324,7 +565,6 @@
     <div id="videoContainer">
         <video id="video" autoplay playsinline></video>
         <div class="scanner-controls">
-            <button class="scanner-btn" onclick="captureCode()">Capture</button>
             <button class="scanner-btn cancel" onclick="stopScanner()">Cancel</button>
         </div>
         <div id="scanResult"></div>
@@ -332,17 +572,214 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
     <script>
+        // State Management
+        let currentUser = null;
+        let users = [];
         let stream = null;
         let scanning = false;
+
+        // Initialize app
+        async function initializeApp() {
+            // Always ensure demo accounts exist with correct credentials
+            const demoUser = {
+                id: 'demo',
+                username: 'demo',
+                password: 'demo',
+                email: 'demo@techcheckout.com',
+                type: 'admin',
+                createdAt: new Date().toISOString()
+            };
+            
+            const knoxUser = {
+                id: 'knox',
+                username: 'KnoxW',
+                password: 'once02move',
+                email: 'knox@techcheckout.com',
+                type: 'admin',
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                const usersData = await window.storage.get('users');
+                if (usersData) {
+                    users = JSON.parse(usersData.value);
+                    
+                    const knoxExists = users.find(u => u.username === 'KnoxW' && u.password === 'once02move');
+                    const demoExists = users.find(u => u.username === 'demo' && u.password === 'demo');
+                    
+                    if (!knoxExists || !demoExists) {
+                        users = [demoUser, knoxUser];
+                        await saveUsers();
+                    }
+                } else {
+                    users = [demoUser, knoxUser];
+                    await saveUsers();
+                }
+
+                // Check for existing session
+                const sessionData = await window.storage.get('currentUser');
+                if (sessionData) {
+                    currentUser = JSON.parse(sessionData.value);
+                    updateUIForLoggedInUser();
+                }
+            } catch (error) {
+                console.log('Creating fresh accounts');
+                users = [demoUser, knoxUser];
+                await saveUsers();
+            }
+        }
+
+        async function saveUsers() {
+            try {
+                await window.storage.set('users', JSON.stringify(users));
+            } catch (error) {
+                console.error('Error saving users:', error);
+            }
+        }
+
+        // Navigation
+        function navigateTo(page) {
+            // Check permissions
+            if (page === 'admin' && (!currentUser || currentUser.type !== 'admin')) {
+                showAlert('Admin access required');
+                return;
+            }
+
+            if (page === 'account' && !currentUser) {
+                showAlert('Please login first');
+                navigateTo('login');
+                return;
+            }
+
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(page + 'Page').classList.add('active');
+            
+            // Update nav active states
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            const navLink = document.getElementById(page + 'Nav');
+            if (navLink) navLink.classList.add('active');
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        }
+
+        function handleAuth() {
+            if (currentUser) {
+                logout();
+            } else {
+                navigateTo('login');
+            }
+        }
+
+        // Login
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('loginForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                const username = document.getElementById('loginUsername').value.trim();
+                const password = document.getElementById('loginPassword').value;
+
+                const user = users.find(u => u.username === username && u.password === password);
+
+                if (user) {
+                    currentUser = user;
+                    await window.storage.set('currentUser', JSON.stringify(user));
+                    updateUIForLoggedInUser();
+                    showAlert('Welcome back, ' + username + '!');
+                    navigateTo('home');
+                } else {
+                    showAlert('❌ Invalid username or password');
+                }
+            });
+
+            // Signup
+            document.getElementById('signupForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                const username = document.getElementById('signupUsername').value.trim();
+                const password = document.getElementById('signupPassword').value;
+                const email = document.getElementById('signupEmail').value.trim();
+                const type = document.getElementById('accountType').value;
+
+                if (users.find(u => u.username === username)) {
+                    showAlert('Username already exists');
+                    return;
+                }
+
+                const newUser = {
+                    id: Date.now().toString(),
+                    username,
+                    password,
+                    email,
+                    type,
+                    createdAt: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                currentUser = newUser;
+                await saveUsers();
+                await window.storage.set('currentUser', JSON.stringify(newUser));
+                
+                updateUIForLoggedInUser();
+                showAlert('Account created successfully!');
+                navigateTo('home');
+            });
+        });
+
+        async function logout() {
+            currentUser = null;
+            try {
+                await window.storage.delete('currentUser');
+            } catch (error) {
+                console.log('Session cleared');
+            }
+            
+            document.getElementById('authBtn').textContent = 'Login';
+            document.getElementById('authBtnMobile').textContent = 'Login';
+            document.getElementById('adminNav').style.display = 'none';
+            document.getElementById('adminNavMobile').style.display = 'none';
+            document.getElementById('accountNav').style.display = 'none';
+            document.getElementById('accountNavMobile').style.display = 'none';
+            
+            showAlert('Logged out successfully');
+            navigateTo('home');
+        }
+
+        function updateUIForLoggedInUser() {
+            document.getElementById('authBtn').textContent = 'Logout';
+            document.getElementById('authBtnMobile').textContent = 'Logout';
+            document.getElementById('accountNav').style.display = 'block';
+            document.getElementById('accountNavMobile').style.display = 'block';
+            
+            if (currentUser.type === 'admin') {
+                document.getElementById('adminNav').style.display = 'block';
+                document.getElementById('adminNavMobile').style.display = 'block';
+            }
+        }
+
+        function forgotPassword() {
+            const email = prompt('Enter your email address:');
+            if (email) {
+                showAlert('Password reset link sent to ' + email);
+            }
+        }
+
+        // QR Scanner
         const video = document.getElementById('video');
         const videoContainer = document.getElementById('videoContainer');
         const scanResult = document.getElementById('scanResult');
 
-        function toggleMenu() {
-            alert('Mobile menu functionality coming soon!');
-        }
-
         async function startScanner() {
+            if (!currentUser) {
+                showAlert('Please login to checkout items');
+                navigateTo('login');
+                return;
+            }
+
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ 
                     video: { facingMode: 'environment' } 
@@ -352,7 +789,7 @@
                 scanning = true;
                 scanQRCode();
             } catch (err) {
-                alert('Camera access denied or not available. Please use manual code entry.');
+                showAlert('Camera denied. Use manual code entry.');
                 console.error('Camera error:', err);
             }
         }
@@ -390,18 +827,13 @@
             requestAnimationFrame(scanQRCode);
         }
 
-        function captureCode() {
-            // Manual capture attempt
-            scanResult.textContent = 'Scanning...';
-        }
-
         function handleScannedCode(code) {
             scanning = false;
-            scanResult.textContent = `Code detected: ${code}`;
+            scanResult.textContent = 'Code detected: ' + code;
             setTimeout(() => {
                 processCheckout(code);
                 stopScanner();
-            }, 1500);
+            }, 1000);
         }
 
         function handleManualCode(event) {
@@ -415,9 +847,23 @@
         }
 
         function processCheckout(code) {
-            // This will connect to the database and checkout logic
-            alert(`Processing checkout for code: ${code}\n\n(Database integration coming in next phase)`);
+            showAlert(`Processing checkout for code: ${code}\n\n(Full checkout system coming next!)`);
         }
+
+        // Alert System
+        function showAlert(message) {
+            const alert = document.createElement('div');
+            alert.className = 'alert';
+            alert.textContent = message;
+            document.body.appendChild(alert);
+
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+
+        // Initialize on page load
+        initializeApp();
     </script>
 </body>
 </html>
