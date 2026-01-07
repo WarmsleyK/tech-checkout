@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Checkout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: opacity 0.3s;
+            padding-bottom: 5px;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+        .nav-links a.active {
+            border-bottom: 3px solid white;
+        }
+
+        .login-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            background: white;
+            color: #1e3a8a;
+        }
+
+        /* Mobile Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+        }
+
+        /* Main Content */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            min-height: calc(100vh - 80px);
+        }
+
+        h1 {
+            font-size: 64px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 50px;
+            letter-spacing: 1px;
+        }
+
+        /* Checkout Container */
+        .checkout-container {
+            display: flex;
+            border: 4px solid white;
+            border-radius: 40px;
+            overflow: hidden;
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .scanner-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .scanner-section:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .camera-icon {
+            width: 120px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .divider {
+            width: 2px;
+            background: white;
+        }
+
+        .code-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .code-input {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 18px;
+            text-align: center;
+            width: 100%;
+            outline: none;
+        }
+
+        .code-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Video Scanner */
+        #videoContainer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #videoContainer.active {
+            display: flex;
+        }
+
+        #video {
+            max-width: 90%;
+            max-height: 70vh;
+            border: 3px solid white;
+            border-radius: 10px;
+        }
+
+        .scanner-controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .scanner-btn {
+            background: white;
+            color: #1e3a8a;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .scanner-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .scanner-btn.cancel {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        #scanResult {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links, .login-btn {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            nav {
+                padding: 20px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            h1 {
+                font-size: 36px;
+                margin-bottom: 40px;
+            }
+
+            .checkout-container {
+                flex-direction: column;
+                max-width: 400px;
+            }
+
+            .divider {
+                width: 100%;
+                height: 2px;
+            }
+
+            .scanner-section, .code-section {
+                padding: 30px;
+            }
+
+            .camera-icon {
+                width: 100px;
+                height: 70px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .checkout-container {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">TECH CHECKOUT</div>
+        
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="#admin">Admin</a></li>
+            <li><a href="#account">Account</a></li>
+        </ul>
+        
+        <button class="login-btn" onclick="alert('Login functionality coming soon!')">Login</button>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>CHECKOUT YOUR TECH:</h1>
+        
+        <div class="checkout-container">
+            <div class="scanner-section" onclick="startScanner()">
+                <div class="camera-icon">📷</div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="code-section">
+                <input type="text" class="code-input" placeholder="Input Code" id="manualCode" onkeypress="handleManualCode(event)">
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Scanner Overlay -->
+    <div id="videoContainer">
+        <video id="video" autoplay playsinline></video>
+        <div class="scanner-controls">
+            <button class="scanner-btn" onclick="captureCode()">Capture</button>
+            <button class="scanner-btn cancel" onclick="stopScanner()">Cancel</button>
+        </div>
+        <div id="scanResult"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+    <script>
+        let stream = null;
+        let scanning = false;
+        const video = document.getElementById('video');
+        const videoContainer = document.getElementById('videoContainer');
+        const scanResult = document.getElementById('scanResult');
+
+        function toggleMenu() {
+            alert('Mobile menu functionality coming soon!');
+        }
+
+        async function startScanner() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' } 
+                });
+                video.srcObject = stream;
+                videoContainer.classList.add('active');
+                scanning = true;
+                scanQRCode();
+            } catch (err) {
+                alert('Camera access denied or not available. Please use manual code entry.');
+                console.error('Camera error:', err);
+            }
+        }
+
+        function stopScanner() {
+            scanning = false;
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            videoContainer.classList.remove('active');
+            scanResult.textContent = '';
+        }
+
+        function scanQRCode() {
+            if (!scanning) return;
+
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
+                
+                if (code) {
+                    handleScannedCode(code.data);
+                    return;
+                }
+            }
+            
+            requestAnimationFrame(scanQRCode);
+        }
+
+        function captureCode() {
+            // Manual capture attempt
+            scanResult.textContent = 'Scanning...';
+        }
+
+        function handleScannedCode(code) {
+            scanning = false;
+            scanResult.textContent = `Code detected: ${code}`;
+            setTimeout(() => {
+                processCheckout(code);
+                stopScanner();
+            }, 1500);
+        }
+
+        function handleManualCode(event) {
+            if (event.key === 'Enter') {
+                const code = event.target.value.trim();
+                if (code) {
+                    processCheckout(code);
+                    event.target.value = '';
+                }
+            }
+        }
+
+        function processCheckout(code) {
+            // This will connect to the database and checkout logic
+            alert(`Processing checkout for code: ${code}\n\n(Database integration coming in next phase)`);
+        }
+    </script>
+</body>
+</html>
